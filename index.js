@@ -13,22 +13,19 @@ app.post("/criar", async (req, res) => {
     const { name, fileUrl, signerName, signerEmail } = req.body;
 
     const query = `
-      mutation CreateDocument($document: DocumentInput!, $signers: [SignerInput!]!, $file: Upload!) {
-        createDocument(document: $document, signers: $signers, file: $file) {
-          id
-          name
-          signers {
-            edges {
-              node {
-                id
-                email
-                link { short_link }
-              }
-            }
-          }
-        }
+  mutation CreateDocument($document: DocumentInput!, $signers: [SignerInput!]!, $file: Upload!) {
+    createDocument(document: $document, signers: $signers, file: $file) {
+      id
+      name
+      signatures {
+        public_id
+        name
+        email
+        link { short_link }
       }
-    `;
+    }
+  }
+`;
 
     // Baixa o arquivo do Cloudinary
     const fileRes = await fetch(fileUrl);
