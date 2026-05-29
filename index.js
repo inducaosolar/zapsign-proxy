@@ -69,11 +69,9 @@ app.get("/verificar/:id", async (req, res) => {
       id
       name
       signatures {
-        signed
-        signed_at
+        signed { date }
         email
         name
-        link { short_link }
       }
     }
   }
