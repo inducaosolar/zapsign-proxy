@@ -64,17 +64,20 @@ app.post("/criar", async (req, res) => {
 app.get("/verificar/:id", async (req, res) => {
   try {
     const query = `
-      query {
-        document(id: "${req.params.id}") {
-          id
-          name
-          signatures {
-            signed
-            signer { email name }
-          }
-        }
+  query {
+    document(id: "${req.params.id}") {
+      id
+      name
+      signatures {
+        signed
+        signed_at
+        email
+        name
+        link { short_link }
       }
-    `;
+    }
+  }
+`;
     const response = await fetch("https://api.autentique.com.br/v2/graphql", {
       method: "POST",
       headers: {
@@ -84,6 +87,7 @@ app.get("/verificar/:id", async (req, res) => {
       body: JSON.stringify({ query }),
     });
     const data = await response.json();
+    console.log("Autentique response:", JSON.stringify(data));
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
