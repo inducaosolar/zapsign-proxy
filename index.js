@@ -53,9 +53,17 @@ app.post("/criar", async (req, res) => {
       },
       body: formData,
     });
-    const data = await response.json();
-
-    const docId = data?.data?.createDocument?.id;
+        const rawText = await response.text();
+    console.log("Autentique /criar status:", response.status, "corpo:", rawText.slice(0, 500));
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (parseErr) {
+      return res.status(502).json({
+        error: "Resposta inválida da Autentique (status " + response.status + "): " + rawText.slice(0, 300),
+      });
+    }
+       const docId = data?.data?.createDocument?.id;
     if (docId) {
       try {
         const signQuery = `
